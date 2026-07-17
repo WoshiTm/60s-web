@@ -65,10 +65,18 @@ button {
 }
 
 button:focus-visible,
-a:focus-visible,
-input:focus-visible {
+a:focus-visible {
 	outline: 2px solid rgba(15, 155, 142, 0.36);
 	outline-offset: 2px;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+	outline: none;
 }
 
 .app-shell {
@@ -486,7 +494,6 @@ input:focus-visible {
 	padding: 0 11px;
 	border: 1px solid var(--line);
 	border-radius: 8px;
-	outline-color: var(--accent);
 }
 
 .avatar-notice {
@@ -1122,7 +1129,6 @@ main {
 	border-radius: 8px;
 	background: var(--input-bg);
 	color: var(--heading);
-	outline-color: var(--accent);
 }
 
 .api-guide-error {
@@ -1945,7 +1951,6 @@ main {
 	border: 1px solid var(--line);
 	border-radius: 8px;
 	background: #fff;
-	outline-color: var(--accent);
 }
 
 .api-control-row {
@@ -3058,7 +3063,6 @@ main {
 	border: 1px solid var(--line);
 	border-radius: 10px;
 	background: #fff;
-	outline-color: var(--accent);
 	color: #1f2937;
 }
 
@@ -4372,7 +4376,6 @@ footer strong {
 	--surface-tint: rgba(15, 143, 127, 0.12);
 	--accent-soft: rgba(15, 143, 127, 0.08);
 	--accent-border: rgba(15, 143, 127, 0.32);
-	--accent-focus: rgba(15, 143, 127, 0.1);
 	--input-bg: #ffffff;
 	--nav-bg: rgba(255, 255, 255, 0.88);
 	--shadow: none;
@@ -4506,8 +4509,8 @@ main {
 }
 
 .search-box:focus-within {
-	border-color: var(--accent-border);
-	box-shadow: 0 0 0 4px var(--accent-focus);
+	border-color: var(--line);
+	box-shadow: none;
 }
 
 .search-box svg {
@@ -6779,6 +6782,22 @@ main > .page-stack:first-child {
 	display: none;
 }
 
+@media (max-width: 760px) {
+	.daily-card .card-title {
+		align-items: center;
+		flex-direction: row;
+	}
+
+	.daily-card .card-title > span {
+		flex: 1 1 auto;
+	}
+
+	.daily-actions {
+		flex: 0 0 auto;
+		margin-left: auto;
+	}
+}
+
 .settings-nav {
 	display: flex;
 	gap: 2px;
@@ -7559,10 +7578,8 @@ main > .page-stack:first-child {
 }
 
 .wallpaper-custom .search-box:focus-within {
-	border-color: var(--accent-border);
-	box-shadow:
-		0 0 0 4px var(--accent-focus),
-		0 16px 42px rgba(31, 35, 40, 0.12);
+	border-color: var(--line);
+	box-shadow: 0 16px 42px rgba(31, 35, 40, 0.12);
 }
 
 .wallpaper-custom .settings-panel .color-theme-grid button.active,
