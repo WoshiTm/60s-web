@@ -89,7 +89,6 @@ import {
 import {
 	applyServiceWorkerUpdate,
 	registerServiceWorker,
-	shouldShowIosInstallHint,
 } from "./pwa";
 
 const DEFAULT_CITY = "上海";
@@ -473,12 +472,9 @@ export function App() {
 	);
 	const [serviceWorkerUpdate, setServiceWorkerUpdate] =
 		useState<ServiceWorkerRegistration | null>(null);
-	const [showInstallHint, setShowInstallHint] = useState(false);
 	const [showApiGuide, setShowApiGuide] = useState(() => {
 		if (typeof window === "undefined") return false;
-		const dismissed =
-			readStoredValue(STORAGE_KEYS.apiGuideDismissed, "false") === "true";
-		return !dismissed && !apiBase.trim();
+		return !apiBase.trim();
 	});
 	const hasApiBase = Boolean(apiBase.trim());
 	const hasSearchQuery = Boolean(query.trim());
@@ -588,7 +584,6 @@ export function App() {
 		try {
 			normalizeApiBase(apiBase);
 			setShowApiGuide(false);
-			writeStoredValue(STORAGE_KEYS.apiGuideDismissed, "true");
 		} catch {
 			// Keep the guide available until the saved API address is valid.
 		}
@@ -667,12 +662,6 @@ export function App() {
 	}, []);
 
 	useEffect(() => registerServiceWorker(setServiceWorkerUpdate), []);
-
-	useEffect(() => {
-		const dismissed =
-			readStoredValue(STORAGE_KEYS.iosInstallHintDismissed, "false") === "true";
-		setShowInstallHint(!dismissed && shouldShowIosInstallHint());
-	}, []);
 
 	useEffect(() => {
 		const themeColor = colorTheme === "dark" ? "#07100f" : "#ffffff";
@@ -811,7 +800,6 @@ export function App() {
 
 	const dismissApiGuide = () => {
 		setShowApiGuide(false);
-		writeStoredValue(STORAGE_KEYS.apiGuideDismissed, "true");
 	};
 
 	const runSearch = () => {
@@ -846,14 +834,9 @@ export function App() {
 			<PwaStatusBar
 				isOffline={isOffline}
 				updateReady={Boolean(serviceWorkerUpdate)}
-				showInstallHint={showInstallHint}
 				onApplyUpdate={() => {
 					applyServiceWorkerUpdate(serviceWorkerUpdate);
 					setServiceWorkerUpdate(null);
-				}}
-				onDismissInstallHint={() => {
-					writeStoredValue(STORAGE_KEYS.iosInstallHintDismissed, "true");
-					setShowInstallHint(false);
 				}}
 			/>
 
@@ -1038,7 +1021,6 @@ export function App() {
 					onSave={(value) => {
 						setApiBase(value);
 						setShowApiGuide(false);
-						writeStoredValue(STORAGE_KEYS.apiGuideDismissed, "true");
 					}}
 				/>
 			)}
