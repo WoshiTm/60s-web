@@ -17,7 +17,7 @@ export type SettingsState = {
 
 export type PageId = "home" | "hot" | "news" | "weather" | "tools" | "settings";
 export type ToolId = "translate" | "qrcode" | "password" | "palette";
-export type SearchProviderId = "site" | "bing" | "google" | "chatgpt" | "doubao";
+export type SearchProviderId = "bing" | "google" | "chatgpt" | "doubao";
 export type EndpointFavoriteId = string;
 export type HotBoardId =
 	| "weibo"
@@ -41,7 +41,7 @@ export type QuickFavoriteId =
 	| "tool-password"
 	| "tool-palette";
 export type WallpaperMode = "default" | "mint" | "paper" | "dawn" | "custom";
-export type ChromeTheme = "classic" | "floating";
+export type ChromeTheme = "classic" | "floating" | "single";
 export type ColorTheme = "light" | "dark";
 export type AccentThemeMode = "green" | "blue" | "coral" | "violet" | "custom";
 export type MobileNavMode = "auto" | "bottom" | "top";

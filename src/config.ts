@@ -36,6 +36,7 @@ export const CACHE_TTL = 60 * 60 * 1000;
 export const STORAGE_KEYS = {
 	apiBase: "60s-web:api-base",
 	city: "60s-web:city",
+	activePage: "60s-web:active-page",
 	settings: "60s-web:settings",
 	avatar: "60s-web:avatar",
 	searchProvider: "60s-web:search-provider",
@@ -189,7 +190,6 @@ export const searchProviders: Array<{
 	label: string;
 	sub: string;
 }> = [
-	{ id: "site", label: "站内", sub: "接口" },
 	{ id: "bing", label: "Bing", sub: "网页" },
 	{ id: "google", label: "Google", sub: "网页" },
 	{ id: "chatgpt", label: "ChatGPT", sub: "问答" },
@@ -215,6 +215,7 @@ export const chromeThemes: Array<{
 }> = [
 	{ id: "classic", label: "经典", sub: "标准顶栏" },
 	{ id: "floating", label: "悬浮", sub: "悬浮胶囊" },
+	{ id: "single", label: "单页", sub: "隐藏导航" },
 ];
 
 export const colorThemes: Array<{

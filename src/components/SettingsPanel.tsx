@@ -21,7 +21,6 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { fetchApi, normalizeApiBase, normalizeApiBaseInput } from "../api";
 import {
-	API_REPO_URL,
 	API_DOCS_URL,
 	WEB_REPO_URL,
 	accentThemes,
@@ -121,7 +120,6 @@ export function SettingsPanel({
 	setQuickFavorites,
 	hotBoardPreferences,
 	setHotBoardPreferences,
-	onResetQuickFavorites,
 	compact = false,
 }: {
 	apiBase: string;
@@ -145,7 +143,6 @@ export function SettingsPanel({
 	setQuickFavorites?: (favorites: QuickFavoriteId[]) => void;
 	hotBoardPreferences?: HotBoardId[];
 	setHotBoardPreferences?: (preferences: HotBoardId[]) => void;
-	onResetQuickFavorites?: () => void;
 	compact?: boolean;
 }) {
 	const wallpaperInputRef = useRef<HTMLInputElement | null>(null);
@@ -469,7 +466,7 @@ export function SettingsPanel({
 						</div>
 						{colorTheme && setColorTheme && (
 							<>
-								<div className="settings-subtitle">
+								<div className="settings-subtitle first-subtitle">
 									<span>
 										{colorTheme === "dark" ? (
 											<Moon size={18} />
@@ -769,15 +766,6 @@ export function SettingsPanel({
 									);
 								})}
 							</div>
-							{onResetQuickFavorites && (
-								<button
-									type="button"
-									className="quick-reset-button"
-									onClick={onResetQuickFavorites}
-								>
-									<RotateCcw size={16} /> 恢复默认快捷入口
-								</button>
-							)}
 						</>
 					)}
 				</section>
@@ -856,13 +844,6 @@ export function SettingsPanel({
 								<span>
 									<b>60s-web</b>
 									<small>前端项目</small>
-								</span>
-							</a>
-							<a href={API_REPO_URL} target="_blank" rel="noreferrer">
-								<ExternalLink size={18} />
-								<span>
-									<b>60s API</b>
-									<small>数据上游</small>
 								</span>
 							</a>
 						</div>

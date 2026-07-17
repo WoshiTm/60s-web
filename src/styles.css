@@ -128,7 +128,10 @@ input:focus-visible {
 	z-index: 20;
 	height: 60px;
 	display: grid;
-	grid-template-columns: minmax(220px, 260px) minmax(420px, 1fr) minmax(88px, 128px);
+	grid-template-columns: minmax(220px, 260px) minmax(420px, 1fr) minmax(
+			88px,
+			128px
+		);
 	align-items: center;
 	gap: 18px;
 	padding: 0 max(32px, calc((100vw - var(--shell-width)) / 2 + 32px));
@@ -189,7 +192,10 @@ input:focus-visible {
 
 .chrome-floating .topbar {
 	width: min(var(--shell-width), calc(100% - var(--page-gutter)));
-	grid-template-columns: minmax(220px, 260px) minmax(420px, 1fr) minmax(88px, 128px);
+	grid-template-columns: minmax(220px, 260px) minmax(420px, 1fr) minmax(
+			88px,
+			128px
+		);
 	margin: 14px auto 0;
 	padding: 0 26px;
 	border: 1px solid var(--line);
@@ -665,33 +671,6 @@ main {
 
 .chip-symbol.pink {
 	color: #ef4b8d;
-}
-
-.search-results {
-	width: min(820px, 100%);
-	margin: 12px auto 0;
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-	gap: 10px;
-}
-
-.search-results a,
-.search-results .disabled-result {
-	display: grid;
-	gap: 4px;
-	padding: 12px 14px;
-	border: 1px solid var(--line);
-	border-radius: 8px;
-	background: #fff;
-}
-
-.search-results .disabled-result {
-	color: var(--muted);
-	opacity: 0.72;
-}
-
-.search-results small {
-	color: var(--muted);
 }
 
 .home-layout {
@@ -2400,6 +2379,19 @@ main {
 	box-shadow: inset 0 0 0 5px #fff;
 }
 
+.chrome-preview-single {
+	grid-template-columns: 1fr auto;
+	background: #f8fbfd;
+}
+
+.chrome-preview-single span {
+	width: 28px;
+}
+
+.chrome-preview-single b {
+	width: 18px;
+}
+
 .wallpaper-grid {
 	display: grid;
 	grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -2509,20 +2501,6 @@ main {
 	color: #d97706;
 }
 
-.quick-reset-button {
-	min-height: 34px;
-	display: inline-flex;
-	align-items: center;
-	gap: 7px;
-	margin: 0 14px 16px auto;
-	padding: 0 13px;
-	border: 1px solid var(--line);
-	border-radius: 999px;
-	background: var(--surface-strong);
-	color: var(--accent-dark);
-	font-weight: 800;
-}
-
 .mobile-nav-preview {
 	position: relative;
 	border: 1px solid rgba(15, 155, 142, 0.22);
@@ -2615,8 +2593,16 @@ main {
 
 .wallpaper-default {
 	background:
-		radial-gradient(circle at 20% 15%, rgba(15, 155, 142, 0.28), transparent 32px),
-		radial-gradient(circle at 82% 35%, rgba(240, 151, 69, 0.3), transparent 30px),
+		radial-gradient(
+			circle at 20% 15%,
+			rgba(15, 155, 142, 0.28),
+			transparent 32px
+		),
+		radial-gradient(
+			circle at 82% 35%,
+			rgba(240, 151, 69, 0.3),
+			transparent 30px
+		),
 		#f6f8f8;
 }
 
@@ -3383,8 +3369,6 @@ footer strong {
 .theme-dark .mobile-nav,
 .theme-dark .pwa-status-strip,
 .theme-dark .search-box,
-.theme-dark .search-results a,
-.theme-dark .search-results .disabled-result,
 .theme-dark .tool-panel {
 	background: var(--surface);
 	border-color: var(--line);
@@ -4400,8 +4384,7 @@ body {
 
 .app-shell {
 	position: relative;
-	background:
-		linear-gradient(180deg, #ffffff 0%, #ffffff 46%, #f6f8fa 100%);
+	background: linear-gradient(180deg, #ffffff 0%, #ffffff 46%, #f6f8fa 100%);
 }
 
 .topbar,
@@ -4418,7 +4401,10 @@ body {
 }
 
 .topbar {
-	grid-template-columns: minmax(220px, 280px) minmax(420px, 1fr) minmax(84px, 116px);
+	grid-template-columns: minmax(220px, 280px) minmax(420px, 1fr) minmax(
+			84px,
+			116px
+		);
 	gap: 20px;
 }
 
@@ -5167,7 +5153,6 @@ main {
 	color: var(--accent-dark);
 }
 
-.quick-reset-button,
 .home-card-actions button,
 .home-card-toolbar button {
 	border-color: var(--line-strong);
@@ -5292,7 +5277,6 @@ footer {
 .theme-dark .tool-form textarea,
 .theme-dark .city-select,
 .theme-dark .outline-button,
-.theme-dark .quick-reset-button,
 .theme-dark .home-card-actions button,
 .theme-dark .home-card-toolbar button {
 	background: #0d1117;
@@ -5521,9 +5505,15 @@ footer {
 .settings-panel .color-theme-grid button.active,
 .settings-panel .chrome-theme-grid button.active,
 .settings-panel .mobile-nav-mode-grid button.active,
-.settings-panel .quick-settings-grid button.active,
 .settings-panel .wallpaper-grid button.active {
 	background: linear-gradient(90deg, var(--surface-tint), transparent 78%);
+	box-shadow:
+		inset 3px 0 0 var(--accent),
+		inset 0 -1px 0 var(--line);
+	color: var(--accent-dark);
+}
+
+.settings-panel .quick-settings-grid button.active {
 	box-shadow:
 		inset 3px 0 0 var(--accent),
 		inset 0 -1px 0 var(--line);
@@ -5537,10 +5527,6 @@ footer {
 .settings-panel .chrome-theme-grid,
 .settings-panel .mobile-nav-mode-grid {
 	gap: 0 14px;
-}
-
-.settings-panel .quick-reset-button {
-	margin-top: 10px;
 }
 
 .settings-dashboard {
@@ -5755,7 +5741,10 @@ footer {
 
 /* Hierarchy slimming pass. */
 .topbar {
-	grid-template-columns: minmax(150px, 220px) minmax(360px, 1fr) minmax(84px, 116px);
+	grid-template-columns: minmax(150px, 220px) minmax(360px, 1fr) minmax(
+			84px,
+			116px
+		);
 }
 
 .brand {
@@ -6273,7 +6262,10 @@ html {
 }
 
 .topbar {
-	grid-template-columns: minmax(150px, 220px) minmax(280px, 1fr) minmax(132px, 164px);
+	grid-template-columns: minmax(150px, 220px) minmax(280px, 1fr) minmax(
+			132px,
+			164px
+		);
 }
 
 .settings-shortcut {
@@ -6295,10 +6287,6 @@ html {
 }
 
 .search-meta-row {
-	width: min(640px, 100%);
-}
-
-.search-results {
 	width: min(640px, 100%);
 }
 
@@ -6384,12 +6372,14 @@ html {
 @media (max-width: 1180px) {
 	.topbar,
 	.chrome-floating .topbar {
-		grid-template-columns: minmax(136px, 1fr) minmax(0, auto) minmax(132px, 164px);
+		grid-template-columns: minmax(136px, 1fr) minmax(0, auto) minmax(
+				132px,
+				164px
+			);
 	}
 
 	.search-box,
-	.search-meta-row,
-	.search-results {
+	.search-meta-row {
 		width: min(680px, 100%);
 	}
 }
@@ -6405,8 +6395,7 @@ html {
 	}
 
 	.search-box,
-	.search-meta-row,
-	.search-results {
+	.search-meta-row {
 		width: 100%;
 	}
 
@@ -6904,7 +6893,6 @@ main > .page-stack:first-child {
 }
 
 .hot-source-grid button.active {
-	background: linear-gradient(90deg, var(--surface-tint), transparent 78%);
 	box-shadow:
 		inset 3px 0 0 var(--accent),
 		inset 0 -1px 0 var(--line);
@@ -7440,7 +7428,6 @@ main > .page-stack:first-child {
 .wallpaper-custom .settings-panel,
 .wallpaper-custom .tool-panel,
 .wallpaper-custom .endpoint-lab,
-.wallpaper-custom .search-results,
 .wallpaper-custom .quick-drawer .quick-chips,
 .wallpaper-custom .api-guide-dialog,
 .wallpaper-custom .avatar-popover,
@@ -7471,7 +7458,6 @@ main > .page-stack:first-child {
 .wallpaper-custom .city-select,
 .wallpaper-custom .mini-input,
 .wallpaper-custom .outline-button,
-.wallpaper-custom .quick-reset-button,
 .wallpaper-custom .home-card-actions button,
 .wallpaper-custom .home-card-toolbar button,
 .wallpaper-custom .tool-panel .tool-checkbox,
@@ -7562,7 +7548,9 @@ main > .page-stack:first-child {
 
 .wallpaper-custom .search-box:focus-within {
 	border-color: var(--accent-border);
-	box-shadow: 0 0 0 4px var(--accent-focus), 0 16px 42px rgba(31, 35, 40, 0.12);
+	box-shadow:
+		0 0 0 4px var(--accent-focus),
+		0 16px 42px rgba(31, 35, 40, 0.12);
 }
 
 .wallpaper-custom .settings-panel .color-theme-grid button.active,
@@ -7579,7 +7567,10 @@ main > .page-stack:first-child {
 @media (min-width: 761px) {
 	.app-shell.chrome-floating .topbar {
 		width: min(960px, calc(100% - clamp(48px, 10vw, 168px)));
-		grid-template-columns: minmax(170px, 220px) minmax(360px, 1fr) minmax(88px, 120px);
+		grid-template-columns: minmax(170px, 220px) minmax(360px, 1fr) minmax(
+				88px,
+				120px
+			);
 		gap: 16px;
 		padding-right: 22px;
 		padding-left: 22px;
@@ -7595,8 +7586,7 @@ main > .page-stack:first-child {
 	.wallpaper-custom .card,
 	.wallpaper-custom .settings-panel,
 	.wallpaper-custom .tool-panel,
-	.wallpaper-custom .endpoint-lab,
-	.wallpaper-custom .search-results {
+	.wallpaper-custom .endpoint-lab {
 		border-radius: 12px;
 	}
 
@@ -7649,11 +7639,22 @@ main > .page-stack:first-child {
 }
 
 .github-link-grid {
-	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-template-columns: minmax(0, 360px);
 }
 
 .compact-subtitle {
 	padding-top: 4px;
+}
+
+.settings-subtitle.first-subtitle {
+	padding-top: 0;
+	border-top: 0;
+}
+
+.page-stack > .market-strip .card-title,
+.page-stack > .market-strip .market-grid {
+	padding-right: 0;
+	padding-left: 0;
 }
 
 .wallpaper-custom .config-action-grid a {
@@ -7667,5 +7668,21 @@ main > .page-stack:first-child {
 @media (max-width: 760px) {
 	.github-link-grid {
 		grid-template-columns: 1fr;
+	}
+}
+
+/* Single-page desktop chrome. */
+.app-shell.chrome-single .topbar {
+	grid-template-columns: minmax(160px, 1fr) auto;
+}
+
+.app-shell.chrome-single .topbar nav {
+	display: none;
+}
+
+@media (min-width: 761px) {
+	.app-shell.chrome-single .topbar {
+		padding-right: max(44px, calc((100vw - var(--shell-width)) / 2 + 44px));
+		padding-left: max(44px, calc((100vw - var(--shell-width)) / 2 + 44px));
 	}
 }

@@ -14,7 +14,6 @@ import {
 import {
 	type DailyNews,
 	DEFAULT_API_BASE,
-	type EndpointDefinition,
 	type EpicGame,
 	type ExchangeRate,
 	endpoints,
@@ -23,7 +22,6 @@ import {
 	normalizeApiBase,
 	normalizeApiBaseInput,
 	toItems,
-	tryBuildUrl,
 	type WeatherForecast,
 	type WeatherRealtime,
 } from "./api";
@@ -44,7 +42,6 @@ import { ToolWorkspace } from "./components/ToolWorkspace";
 import { WeatherPage } from "./components/Weather";
 import { Footer } from "./components/ui";
 import {
-	categoryLabels,
 	chromeThemes,
 	colorThemes,
 	API_DOCS_URL,
@@ -86,7 +83,6 @@ import type {
 } from "./types";
 import {
 	buildSearchTarget,
-	defaults,
 	getAccentStyle,
 	getWallpaperStyle,
 } from "./utils";
@@ -97,7 +93,7 @@ import {
 } from "./pwa";
 
 const DEFAULT_CITY = "上海";
-const DEFAULT_SEARCH_PROVIDER: SearchProviderId = "site";
+const DEFAULT_SEARCH_PROVIDER: SearchProviderId = "bing";
 const DEFAULT_CHROME_THEME: ChromeTheme = "classic";
 const DEFAULT_COLOR_THEME: ColorTheme = "light";
 const DEFAULT_ACCENT_THEME: AccentThemeState = { mode: "green" };
@@ -112,6 +108,7 @@ const DEFAULT_SETTINGS_STATE: SettingsState = {
 const DEFAULT_AVATAR_STATE: AvatarState = { mode: "default" };
 const DEFAULT_WALLPAPER_STATE: WallpaperState = { mode: "default" };
 const CONFIG_EXPORT_VERSION = 2;
+const PAGE_IDS: PageId[] = ["home", "hot", "news", "weather", "tools", "settings"];
 
 type ConfigActionResult = {
 	ok: boolean;
@@ -224,8 +221,21 @@ function readEnum<T extends string>(
 }
 
 function normalizeChromeTheme(value: unknown): ChromeTheme {
+	if (value === "single") return "single";
 	if (value === "floating") return "floating";
 	return "classic";
+}
+
+function normalizePageId(value: unknown): PageId {
+	return typeof value === "string" && PAGE_IDS.includes(value as PageId)
+		? (value as PageId)
+		: "home";
+}
+
+function normalizeSearchProvider(value: unknown): SearchProviderId {
+	return searchProviders.some((provider) => provider.id === value)
+		? (value as SearchProviderId)
+		: DEFAULT_SEARCH_PROVIDER;
 }
 
 function normalizeSettingsState(value: unknown): SettingsState {
@@ -331,12 +341,7 @@ function parseImportedConfig(raw: string): ExportedSettings {
 	return {
 		apiBase,
 		city: readString(config.city, DEFAULT_CITY).trim() || DEFAULT_CITY,
-		searchProvider: readEnum(
-			config.searchProvider,
-			searchProviders.map((item) => item.id),
-			DEFAULT_SEARCH_PROVIDER,
-			"搜索引擎",
-		),
+		searchProvider: normalizeSearchProvider(config.searchProvider),
 		chromeTheme: normalizeChromeTheme(config.chromeTheme),
 		colorTheme: readEnum(
 			config.colorTheme,
@@ -397,15 +402,15 @@ export function App() {
 	);
 	const [query, setQuery] = useState("");
 	const [quickDrawerOpen, setQuickDrawerOpen] = useState(false);
-	const quickDrawerRef = useRef<HTMLDetailsElement | null>(null);
-	const [activePage, setActivePage] = useState<PageId>("home");
+	const quickDrawerCloseTimer = useRef<number | null>(null);
+	const [activePage, setActivePage] = useState<PageId>(() =>
+		normalizePageId(readStoredValue(STORAGE_KEYS.activePage, "home")),
+	);
 	const [activeTool, setActiveTool] = useState<ToolId>("translate");
 	const [searchProvider, setSearchProvider] = useState<SearchProviderId>(
-		() =>
-			readStoredValue(
-				STORAGE_KEYS.searchProvider,
-				DEFAULT_SEARCH_PROVIDER,
-			) as SearchProviderId,
+		() => normalizeSearchProvider(
+			readStoredValue(STORAGE_KEYS.searchProvider, DEFAULT_SEARCH_PROVIDER),
+		),
 	);
 	const [chromeTheme, setChromeTheme] = useState<ChromeTheme>(
 		() => normalizeChromeTheme(readStoredValue(
@@ -484,25 +489,28 @@ export function App() {
 		);
 	}, [hotBoardPreferences]);
 
+	const clearQuickDrawerClose = () => {
+		if (quickDrawerCloseTimer.current === null) return;
+		window.clearTimeout(quickDrawerCloseTimer.current);
+		quickDrawerCloseTimer.current = null;
+	};
+
+	const openQuickDrawer = () => {
+		clearQuickDrawerClose();
+		setQuickDrawerOpen(true);
+	};
+
+	const scheduleQuickDrawerClose = () => {
+		clearQuickDrawerClose();
+		quickDrawerCloseTimer.current = window.setTimeout(() => {
+			setQuickDrawerOpen(false);
+			quickDrawerCloseTimer.current = null;
+		}, 220);
+	};
+
 	useEffect(() => {
-		if (!quickDrawerOpen) return;
-		const closeWhenOutside = (event: PointerEvent) => {
-			const target = event.target;
-			if (
-				target instanceof Node &&
-				quickDrawerRef.current &&
-				!quickDrawerRef.current.contains(target)
-			) {
-				setQuickDrawerOpen(false);
-			}
-		};
-		document.addEventListener("pointermove", closeWhenOutside, {
-			passive: true,
-		});
-		return () => {
-			document.removeEventListener("pointermove", closeWhenOutside);
-		};
-	}, [quickDrawerOpen]);
+		return clearQuickDrawerClose;
+	}, []);
 
 	const daily = useApi<DailyNews>(
 		apiBase,
@@ -571,24 +579,6 @@ export function App() {
 		[maoyan.data],
 	);
 
-	const searchMatches = useMemo(() => {
-		const keyword = query.trim().toLowerCase();
-		if (!keyword) return [];
-		return endpoints
-			.filter((endpoint) =>
-				[
-					endpoint.name,
-					endpoint.path,
-					endpoint.description,
-					categoryLabels[endpoint.category],
-				]
-					.join(" ")
-					.toLowerCase()
-					.includes(keyword),
-			)
-			.slice(0, 8);
-	}, [query]);
-
 	useEffect(() => {
 		writeStoredValue(STORAGE_KEYS.apiBase, apiBase);
 	}, [apiBase]);
@@ -607,6 +597,10 @@ export function App() {
 	useEffect(() => {
 		writeStoredValue(STORAGE_KEYS.city, city);
 	}, [city]);
+
+	useEffect(() => {
+		writeStoredValue(STORAGE_KEYS.activePage, activePage);
+	}, [activePage]);
 
 	useEffect(() => {
 		writeStoredJson(STORAGE_KEYS.settings, settings);
@@ -826,10 +820,6 @@ export function App() {
 			setActivePage("home");
 			return;
 		}
-		if (searchProvider === "site") {
-			setActivePage("tools");
-			return;
-		}
 		window.open(
 			buildSearchTarget(searchProvider, keyword),
 			"_blank",
@@ -881,11 +871,10 @@ export function App() {
 							<input
 								value={query}
 								onChange={(event) => setQuery(event.target.value)}
-								placeholder={
-									searchProvider === "site"
-										? "搜索接口、路径或关键词..."
-										: `用 ${searchProviders.find((item) => item.id === searchProvider)?.label} 搜索...`
-								}
+								placeholder={`用 ${
+									searchProviders.find((item) => item.id === searchProvider)
+										?.label
+								} 搜索...`}
 							/>
 							{hasSearchQuery && (
 								<button
@@ -916,12 +905,26 @@ export function App() {
 							<details
 								className="quick-drawer"
 								open={quickDrawerOpen}
-								ref={quickDrawerRef}
-								onToggle={(event) =>
-									setQuickDrawerOpen(event.currentTarget.open)
-								}
+								onPointerEnter={openQuickDrawer}
+								onPointerLeave={scheduleQuickDrawerClose}
+								onFocus={openQuickDrawer}
+								onBlur={(event) => {
+									const nextTarget = event.relatedTarget;
+									if (
+										nextTarget instanceof Node &&
+										event.currentTarget.contains(nextTarget)
+									) {
+										return;
+									}
+									scheduleQuickDrawerClose();
+								}}
 							>
-								<summary>
+								<summary
+									onClick={(event) => {
+										event.preventDefault();
+										openQuickDrawer();
+									}}
+								>
 									<LayoutGrid size={15} />
 									快捷
 								</summary>
@@ -938,9 +941,6 @@ export function App() {
 								/>
 							</details>
 						</div>
-						{searchMatches.length > 0 && (
-							<SearchResults base={apiBase} matches={searchMatches} />
-						)}
 					</section>
 				)}
 
@@ -1021,9 +1021,6 @@ export function App() {
 							setQuickFavorites={setQuickFavorites}
 							hotBoardPreferences={hotBoardPreferences}
 							setHotBoardPreferences={setHotBoardPreferences}
-							onResetQuickFavorites={() =>
-								setQuickFavorites([...defaultQuickFavorites])
-							}
 						/>
 					</section>
 				)}
@@ -1174,33 +1171,6 @@ function QuickChips({
 					<LayoutGrid size={17} /> 管理快捷入口
 				</button>
 			)}
-		</div>
-	);
-}
-
-function SearchResults({
-	base,
-	matches,
-}: {
-	base: string;
-	matches: EndpointDefinition[];
-}) {
-	return (
-		<div className="search-results">
-			{matches.map((endpoint) => {
-				const href = tryBuildUrl(base, endpoint.path, defaults(endpoint));
-				return href ? (
-					<a key={endpoint.id} href={href} target="_blank" rel="noreferrer">
-						<span>{endpoint.name}</span>
-						<small>{endpoint.path}</small>
-					</a>
-				) : (
-					<span className="disabled-result" key={endpoint.id}>
-						<span>{endpoint.name}</span>
-						<small>{endpoint.path}</small>
-					</span>
-				);
-			})}
 		</div>
 	);
 }
