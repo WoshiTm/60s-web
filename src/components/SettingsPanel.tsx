@@ -833,11 +833,6 @@ export function SettingsPanel({
 								{configNotice.message}
 							</p>
 						)}
-						<div className="settings-subtitle compact-subtitle">
-							<span>
-								<Github size={18} /> GitHub
-							</span>
-						</div>
 						<div className="config-action-grid github-link-grid">
 							<a href={WEB_REPO_URL} target="_blank" rel="noreferrer">
 								<Github size={18} />

@@ -3385,6 +3385,7 @@ footer strong {
 .theme-dark .city-select,
 .theme-dark .config-action-grid button,
 .theme-dark .forecast-day,
+.theme-dark .hot-source-grid button,
 .theme-dark .hourly-item,
 .theme-dark .metric,
 .theme-dark .mini-section,
@@ -3508,6 +3509,7 @@ footer strong {
 .theme-dark .chrome-theme-grid button,
 .theme-dark .config-action-grid button,
 .theme-dark .color-theme-grid button,
+.theme-dark .hot-source-grid button,
 .theme-dark .mobile-nav-mode-grid button,
 .theme-dark .quick-settings-grid button,
 .theme-dark .wallpaper-grid button {
@@ -3517,6 +3519,7 @@ footer strong {
 
 .theme-dark .chrome-theme-grid button.active,
 .theme-dark .color-theme-grid button.active,
+.theme-dark .hot-source-grid button.active,
 .theme-dark .mobile-nav-mode-grid button.active,
 .theme-dark .quick-settings-grid button.active,
 .theme-dark .wallpaper-grid button.active {
@@ -5102,7 +5105,7 @@ main {
 }
 
 .tool-panel-wrap.featured .card-title {
-	border-bottom-color: var(--accent-border);
+	border-bottom-color: var(--line);
 }
 
 .tool-panel-body {
@@ -5301,6 +5304,7 @@ footer {
 .theme-dark .swatch,
 .theme-dark .color-theme-grid button,
 .theme-dark .chrome-theme-grid button,
+.theme-dark .hot-source-grid button,
 .theme-dark .mobile-nav-mode-grid button,
 .theme-dark .quick-settings-grid button,
 .theme-dark .wallpaper-grid button,
@@ -5493,6 +5497,7 @@ footer {
 .settings-panel .color-theme-grid button,
 .settings-panel .chrome-theme-grid button,
 .settings-panel .mobile-nav-mode-grid button,
+.settings-panel .hot-source-grid button,
 .settings-panel .quick-settings-grid button,
 .settings-panel .wallpaper-grid button,
 .settings-panel .config-action-grid button {
@@ -5502,10 +5507,18 @@ footer {
 	box-shadow: inset 0 -1px 0 var(--line);
 }
 
+.settings-panel .hot-source-grid button,
+.settings-panel .quick-settings-grid button {
+	min-height: 60px;
+	padding: 10px 12px;
+}
+
 .settings-panel .color-theme-grid button.active,
 .settings-panel .chrome-theme-grid button.active,
 .settings-panel .mobile-nav-mode-grid button.active,
-.settings-panel .wallpaper-grid button.active {
+.settings-panel .wallpaper-grid button.active,
+.settings-panel .hot-source-grid button.active,
+.settings-panel .quick-settings-grid button.active {
 	background: linear-gradient(90deg, var(--surface-tint), transparent 78%);
 	box-shadow:
 		inset 3px 0 0 var(--accent),
@@ -5513,13 +5526,7 @@ footer {
 	color: var(--accent-dark);
 }
 
-.settings-panel .quick-settings-grid button.active {
-	box-shadow:
-		inset 3px 0 0 var(--accent),
-		inset 0 -1px 0 var(--line);
-	color: var(--accent-dark);
-}
-
+.settings-panel .hot-source-grid,
 .settings-panel .quick-settings-grid,
 .settings-panel .config-action-grid,
 .settings-panel .wallpaper-grid,
@@ -5681,6 +5688,7 @@ footer {
 .theme-dark .settings-panel .color-theme-grid button,
 .theme-dark .settings-panel .chrome-theme-grid button,
 .theme-dark .settings-panel .mobile-nav-mode-grid button,
+.theme-dark .settings-panel .hot-source-grid button,
 .theme-dark .settings-panel .quick-settings-grid button,
 .theme-dark .settings-panel .wallpaper-grid button,
 .theme-dark .settings-panel .config-action-grid button,
@@ -5692,6 +5700,7 @@ footer {
 
 .theme-dark .settings-panel .color-theme-grid button.active,
 .theme-dark .settings-panel .chrome-theme-grid button.active,
+.theme-dark .settings-panel .hot-source-grid button.active,
 .theme-dark .settings-panel .mobile-nav-mode-grid button.active,
 .theme-dark .settings-panel .quick-settings-grid button.active,
 .theme-dark .settings-panel .wallpaper-grid button.active,
@@ -6874,7 +6883,7 @@ main > .page-stack:first-child {
 
 .hot-source-grid {
 	display: grid;
-	grid-template-columns: repeat(4, minmax(0, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 	gap: 8px;
 }
 
@@ -7065,10 +7074,6 @@ main > .page-stack:first-child {
 .theme-dark .settings-notice.warning {
 	background: rgba(255, 193, 7, 0.14);
 	color: #f5d06f;
-}
-
-.theme-dark .hot-source-grid button.active {
-	background: linear-gradient(90deg, var(--surface-tint), transparent 78%);
 }
 
 @media (max-width: 760px) {
@@ -7273,9 +7278,16 @@ main > .page-stack:first-child {
 .page-stack > .endpoint-lab {
 	width: 100%;
 	max-width: 100%;
+	padding-right: 0;
+	padding-left: 0;
 	margin-right: 0;
 	margin-left: 0;
 	box-sizing: border-box;
+}
+
+.tool-workspace.tool-workspace-grid {
+	padding-right: 0;
+	padding-left: 0;
 }
 
 .tool-workspace,
@@ -7352,6 +7364,13 @@ main > .page-stack:first-child {
 /* Navigation, search and feed refinements. */
 .search-providers button.active,
 .theme-dark .search-providers button.active {
+	background: transparent;
+	box-shadow: none;
+	color: var(--accent-dark);
+}
+
+.hot-board .tabs button.active,
+.theme-dark .hot-board .tabs button.active {
 	background: transparent;
 	box-shadow: none;
 	color: var(--accent-dark);
@@ -7488,6 +7507,7 @@ main > .page-stack:first-child {
 .wallpaper-custom .favorite-card,
 .wallpaper-custom .color-theme-grid button,
 .wallpaper-custom .chrome-theme-grid button,
+.wallpaper-custom .hot-source-grid button,
 .wallpaper-custom .mobile-nav-mode-grid button,
 .wallpaper-custom .quick-settings-grid button,
 .wallpaper-custom .wallpaper-grid button,
@@ -7640,10 +7660,6 @@ main > .page-stack:first-child {
 
 .github-link-grid {
 	grid-template-columns: minmax(0, 360px);
-}
-
-.compact-subtitle {
-	padding-top: 4px;
 }
 
 .settings-subtitle.first-subtitle {
