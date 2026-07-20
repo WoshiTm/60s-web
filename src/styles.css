@@ -6830,17 +6830,21 @@ main > .page-stack:first-child {
 
 @media (max-width: 760px) {
 	.hot-board .card-title,
+	.mini-hot-card .card-title,
 	.daily-card .card-title {
 		align-items: center;
 		flex-direction: row;
 	}
 
 	.hot-board .card-title > span,
+	.mini-hot-card .card-title > span,
 	.daily-card .card-title > span {
 		flex: 1 1 auto;
+		min-width: 0;
 	}
 
 	.hot-board .card-title > .status,
+	.mini-hot-card .card-title > .status,
 	.daily-actions {
 		flex: 0 0 auto;
 		margin-left: auto;
